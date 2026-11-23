@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #222;
+            background: #f0f0f0;
+        }
+
+        /* ===== ГЛАВНЫЙ ЭКРАН ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 34px;
+            color: #1a2a4a;
+        }
+
+        nav {
+            display: flex;
+            gap: 36px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1a2a4a;
+            font-size: 17px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.7;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 5;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .hero-content .subtitle {
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-size: 28px;
+            color: #1a2a4a;
+            margin-bottom: 10px;
+        }
+
+        .hero-content h1 {
+            font-family: Georgia, serif;
+            font-size: 60px;
+            color: #1a2a4a;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 42px;
+            border: 1.5px solid #1a2a4a;
+            border-radius: 50px;
+            background: transparent;
+            color: #1a2a4a;
+            font-size: 16px;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .btn:hover {
+            background: #1a2a4a;
+            color: #fff;
+        }
+
+        /* ===== ОБЩИЕ СТИЛИ СЕКЦИЙ ===== */
+        section {
+            padding: 80px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 50px;
+        }
+
+        /* ===== РАСПИСАНИЕ ===== */
+        .schedule {
+            background: #e8e8e8;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #dcdcdc;
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .schedule-table th {
+            background: #cfcfcf;
+            padding: 14px 10px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+        }
+
+        .schedule-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #c5c5c5;
+            color: #444;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background: #d5d5d5;
+        }
+
+        .schedule-table tr:hover {
+            background: #cacaca;
+        }
+
+        /* ===== ГАЛЕРЕЯ (РОМБЫ) ===== */
+        .gallery {
+            background: #d0d0d0;
+            padding-bottom: 100px;
+        }
+
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            width: 220px;
+            height: 220px;
+            transform: rotate(45deg);
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: rotate(45deg) scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 145%;
+            height: 145%;
+            object-fit: cover;
+            transform: rotate(-45deg) translate(-15%, -15%);
+        }
+
+        /* ===== ПОЧЕМУ МЫ ===== */
+        .why-us {
+            background: #e5e5e5;
+            text-align: center;
+        }
+
+        .why-us h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .why-us h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .why-us .line {
+            width: 60px;
+            height: 3px;
+            background: #555;
+            margin: 0 auto 30px;
+        }
+
+        .why-us p {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: #555;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .why-images {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .why-images img {
+            width: 320px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            transition: transform 0.3s;
+        }
+
+        .why-images img:hover {
+            transform: translateY(-6px);
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 900px) {
+            header {
+                padding: 0 25px;
+            }
+
+            .hero-content h1 {
+                font-size: 40px;
+            }
+
+            .gallery-item {
+                width: 160px;
+                height: 160px;
+            }
+
+            .schedule-table {
+                font-size: 12px;
+            }
+
+            .why-images img {
+                width: 100%;
+                max-width: 340px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div class="hero">
+        <div class="hero-bg">
+            <img src="1.jpg" alt="Пляж">
+        </div>
+
+        <header>
+            <div class="logo">Travel Time</div>
+            <nav>
+                <a href="#schedule">Расписание</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#why">Контакты</a>
+            </nav>
+        </header>
+
+        <div class="hero-content">
+            <p class="subtitle">Туристическое агентство</p>
+            <h1>Приветствует Вас!</h1>
+            <a href="#schedule" class="btn">Купить билеты</a>
+        </div>
+    </div>
+
+    <!-- РАСПИСАНИЕ -->
+    <section class="schedule" id="schedule">
+        <h2 class="section-title">Расписание</h2>
+
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Понедельник</th>
+                    <th>Вторник</th>
+                    <th>Среда</th>
+                    <th>Четверг</th>
+                    <th>Пятница</th>
+                    <th>Суббота</th>
+                    <th>Воскресенье</th>
+                    <th>Откуда</th>
+                    <th>Куда</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>8.10-12.15</td>
+                    <td>-</td>
+                    <td>7.15-11.20</td>
+                    <td>-</td>
+                    <td>8.10-12.15</td>
+                    <td>14.00-17.10</td>
+                    <td>-</td>
+                    <td>г.Астана</td>
+                    <td>Дубай</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>9.50-13.55</td>
+                    <td>-</td>
+                    <td>15.20-19.25</td>
+                    <td>-</td>
+                    <td>11.45-15.50</td>
+                    <td>-</td>
+                    <td>г.Астана</td>
+                    <td>Испания</td>
+                </tr>
+                <tr>
+                    <td>17.45-21.30</td>
+                    <td>-</td>
+                    <td>9.00-12.45</td>
+                    <td>-</td>
+                    <td>8.15-12.00</td>
+                    <td>-</td>
+                    <td>12.00-15.45</td>
+                    <td>г.Астана</td>
+                    <td>Сочи</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>1.30-5.40</td>
+                    <td>-</td>
+                    <td>2.15-6.25</td>
+                    <td>-</td>
+                    <td>3.30-7.40</td>
+                    <td>-</td>
+                    <td>г.Астана</td>
+                    <td>Грузия</td>
+                </tr>
+                <tr>
+                    <td>8.20-13.20</td>
+                    <td>-</td>
+                    <td>7.30-12.30</td>
+                    <td>-</td>
+                    <td>9.15-14.15</td>
+                    <td>-</td>
+                    <td>7.30-12.30</td>
+                    <td>г.Астана</td>
+                    <td>Греция</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>9.00-15.00</td>
+                    <td>-</td>
+                    <td>8.05-14.05</td>
+                    <td>-</td>
+                    <td>10.00-16.00</td>
+                    <td>-</td>
+                    <td>г.Астана</td>
+                    <td>Бали</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ГАЛЕРЕЯ -->
+    <section class="gallery" id="gallery">
+        <h2 class="section-title">Галерея</h2>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="bali.jpg" alt="Бали">
+            </div>
+            <div class="gallery-item">
+                <img src="cei.jpg" alt="Цейлон">
+            </div>
+            <div class="gallery-item">
+                <img src="dubai.jpg" alt="Дубай">
+            </div>
+            <div class="gallery-item">
+                <img src="gruzia.jpg" alt="Грузия">
+            </div>
+            <div class="gallery-item">
+                <img src="ispaniya.jpg" alt="Испания">
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОЧЕМУ МЫ -->
+    <section class="why-us" id="why">
+        <h2>Почему именно наше туристическое агентство?</h2>
+        <h3>Немного нашей уникальности</h3>
+        <div class="line"></div>
+        <p>
+            На нашем сайте вы можете просматривать расписание вылетов и прилётов,
+            а также можете купить билеты и просмотреть нашу маленькую галерею.
+        </p>
+
+        <div class="why-images">
+            <img src="dubai.jpg" alt="Дубай">
+            <img src="соччи.jpg" alt="Сочи">
+            <img src="ispaniya.jpg" alt="Испания">
+        </div>
+    </section>
+
+</body>
+</html>
